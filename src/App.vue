@@ -1,85 +1,46 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <div class="common-layout">
+    <el-container>
+      <el-aside width="14rem">
+        <el-menu
+          default-active="2"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose"
+        >
+          <RouterLink to="/upload">
+            <el-menu-item index="1">
+              <el-icon><icon-menu /></el-icon>
+              <span>上传文件</span>
+            </el-menu-item>
+          </RouterLink>
+          <RouterLink to="/">
+            <el-menu-item index="2">
+              <el-icon><icon-menu /></el-icon> <span>文件列表</span>
+            </el-menu-item>
+          </RouterLink>
+        </el-menu>
+      </el-aside>
+      <el-main><RouterView /></el-main>
+    </el-container>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.common-layout {
+  margin: 0 auto;
+  padding: 1rem;
+  height: 100vh;
+  width: 86vw;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.el-menu-vertical-demo span {
+  font-size: 1rem;
 }
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.el-menu-vertical-demo a {
+  text-decoration: none;
 }
 </style>
