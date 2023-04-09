@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from 'vue-router'
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="14rem">
+      <el-aside width="10rem">
         <el-menu
           default-active="2"
           class="el-menu-vertical-demo"
@@ -32,10 +32,9 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 .common-layout {
-  margin: 0 auto;
-  padding: 1rem;
+  margin: 0;
   height: 100vh;
-  width: 86vw;
+  width: 90vw;
 }
 .el-menu-vertical-demo span {
   font-size: 1rem;

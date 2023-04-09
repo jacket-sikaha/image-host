@@ -13,7 +13,7 @@
     <el-icon class="el-icon--upload"><upload-filled /></el-icon>
     <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
     <template #tip>
-      <div class="el-upload__tip">files with a size less than 20MB</div>
+      <div class="el-upload__tip">Image files with a size less than 20MB</div>
     </template>
   </el-upload>
 </template>
@@ -25,7 +25,10 @@ import { ElMessage } from 'element-plus'
 // 在 upload 组件中添加 ref 属性，用于获取组件实例。
 const upload = ref()
 const beforeAvatarUpload = (rawFile) => {
-  if (rawFile.size / 1024 / 1024 > 20) {
+  if (!rawFile.type.includes('image')) {
+    ElMessage.error('Avatar picture must be JPG format!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 20) {
     ElMessage.error('Avatar picture size can not exceed 20MB!')
     return false
   }

@@ -9,8 +9,8 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import ElementPlus from 'unplugin-element-plus/vite'
 // 推荐 ！！！！！！ vite中element plus按需引入最优雅的用法
-// ElementPlus手动导入样式 message样式不生效问题
-// https://vitejs.dev/config/
+// ElementPlus手动导入样式 message样式不生效问题   https://vitejs.dev/config/
+
 export default defineConfig({
   plugins: [
     vue(),

@@ -1,49 +1,85 @@
 <template>
-  <el-row>
-    <el-col v-for="(o, index) in 2" :key="o" :span="7" :offset="index > 0 ? 2 : 0">
-      <el-card :body-style="{ padding: '0px' }">
+  <div class="grid">
+    <div v-for="(item, index) in fileList" :key="item.id" class="grid-item">
+      <el-card :body-style="{ width: '16rem', height: '16rem' }">
         <el-image
           class="image"
-          style="width: 16rem; height: 16rem"
-          src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+          style="width: 8rem; height: 8rem"
+          :src="item.url"
           fit="scale-down"
-          :preview-src-list="srcList"
+          :preview-src-list="[item.url]"
         />
-        <div style="padding: 1rem">
-          <span>Yummy hamburger</span>
+        <div style="padding: 1rem 0; font: 1rem sans-serif">
+          <span style="text-overflow: ellipsis">{{ item.originalname }}</span>
           <div class="bottom">
-            <time class="time">{{ currentDate }}</time>
-            <el-button text class="button">Operating</el-button>
+            <time class="time">文件大小：{{ item.formatSize }}</time>
+            <el-button type="success" class="button" @click="() => copyUrl(item.url)"
+              >COPY URL</el-button
+            >
           </div>
         </div>
       </el-card>
-    </el-col>
-  </el-row>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
-const srcList = [
-  'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
-  'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
-  'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
-  'https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg',
-  'https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg',
-  'https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg',
-  'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg'
-]
-const currentDate = ref(new Date())
-onMounted(() => {})
+import { ElMessage } from 'element-plus'
+import requests from '../utils/request'
+const apiUrl = import.meta.env.VITE_API_BASE_URL
+const fileList = ref([])
+const copyUrl = (url) => {
+  const textarea = document.createElement('textarea')
+  document.body.appendChild(textarea)
+  textarea.setAttribute('readonly', 'readonly')
+  textarea.value = url
+  textarea.setSelectionRange(0, 9999)
+  textarea.select()
+  if (document.execCommand('copy')) {
+    ElMessage.success('复制成功!')
+  }
+  document.body.removeChild(textarea)
+}
+onMounted(async () => {
+  const { data } = await requests.post('allFiles')
+  fileList.value = data.map((obj) => {
+    obj.url = apiUrl + '/files/' + obj.filename
+    let originSize = obj.size
+    obj.formatSize =
+      originSize / 1024 > 1024
+        ? (originSize / 1024 / 1024).toFixed(2) + 'MB'
+        : (originSize / 1024).toFixed(2) + 'KB'
+    return obj
+  })
+})
 </script>
 
 <style scoped>
+.grid {
+  display: grid;
+  /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+  /*  自适应自填充 */
+  /* 表示列宽至少 200px，如果还有空余则一起等分。 */
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  row-gap: 1rem;
+  grid-auto-flow: row;
+}
+.grid-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .time {
   font-size: 0.8rem;
   color: #999;
 }
 
 .bottom {
-  margin-top: 13px;
+  margin-top: 0.8rem;
   line-height: 0.8rem;
   display: flex;
   flex-direction: column;
@@ -51,7 +87,8 @@ onMounted(() => {})
 }
 
 .button {
-  padding: 0;
+  margin-top: 1rem;
+  padding: 1rem;
   min-height: auto;
 }
 
