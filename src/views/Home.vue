@@ -28,6 +28,7 @@ import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import requests from '../utils/request'
 const apiUrl = import.meta.env.VITE_API_BASE_URL
+const downloadURL = import.meta.env.VITE_API_DOWNLOAD_URL
 const fileList = ref([])
 const copyUrl = (url) => {
   const textarea = document.createElement('textarea')
@@ -45,6 +46,7 @@ onMounted(async () => {
   const { data } = await requests.post('allFiles')
   fileList.value = data.map((obj) => {
     obj.url = apiUrl + '/files/' + obj.filename
+    // obj.url = downloadURL + '/files/' + obj.filename
     let originSize = obj.size
     obj.formatSize =
       originSize / 1024 > 1024
